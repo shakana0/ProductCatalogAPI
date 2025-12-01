@@ -1,4 +1,6 @@
-﻿namespace EcommerceAPI.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EcommerceAPI.Domain;
 
 public class Product
 {
