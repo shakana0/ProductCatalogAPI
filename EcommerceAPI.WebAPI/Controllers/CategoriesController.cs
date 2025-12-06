@@ -1,4 +1,5 @@
-﻿using EcommerceAPI.Application.Categories.Dtos;
+﻿using EcommerceAPI.Application.Categories.Commands.CreateCategory;
+using EcommerceAPI.Application.Categories.Dtos;
 using EcommerceAPI.Application.Categories.Queries.GetAllCategories;
 using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
 using MediatR;
@@ -36,5 +37,13 @@ namespace EcommerceAPI.WebAPI.Controllers
 
             return Ok(category);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryCommand command)
+        {
+            var category = await _mediator.Send(new CreateCategoryCommand(command.Name, command.Description));
+            return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+        }
+
     }
 }
