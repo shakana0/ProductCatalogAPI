@@ -3,6 +3,7 @@ using EcommerceAPI.Infrastructure.Context;
 using EcommerceAPI.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EcommerceAPI.Application.AutoMapper;
+using EcommerceAPI.Application.Categories.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,12 @@ builder.Services.AddCors(options =>
         });
 });
 
-
+// MediatR
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.LicenseKey = licenseKey;
+    cfg.RegisterServicesFromAssembly(typeof(GetCategoryByIdHandler).Assembly);
+});
 
 
 // AutoMapper
