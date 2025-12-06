@@ -1,4 +1,5 @@
 ﻿using EcommerceAPI.Application.Categories.Commands.CreateCategory;
+using EcommerceAPI.Application.Categories.Commands.DeleteCategory;
 using EcommerceAPI.Application.Categories.Dtos;
 using EcommerceAPI.Application.Categories.Queries.GetAllCategories;
 using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
@@ -43,6 +44,17 @@ namespace EcommerceAPI.WebAPI.Controllers
         {
             var category = await _mediator.Send(new CreateCategoryCommand(command.Name, command.Description));
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _mediator.Send(new DeleteCategoryCommand(id));
+
+            if (!result)
+                return NotFound($"No Category found for Id: {id}");
+
+            return NoContent();
         }
 
     }
