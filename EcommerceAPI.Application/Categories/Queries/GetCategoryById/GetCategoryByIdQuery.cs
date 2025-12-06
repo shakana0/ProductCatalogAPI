@@ -1,8 +1,7 @@
-﻿
-using EcommerceAPI.Application.Categories.Dtos;
+﻿using EcommerceAPI.Application.Categories.Dtos;
 using MediatR;
 
-namespace EcommerceAPI.Application.Categories.Queries
+namespace EcommerceAPI.Application.Categories.Queries.GetCategoryById
 {
     public class GetCategoryByIdQuery : IRequest<CategoryDto>
     {
