@@ -1,4 +1,4 @@
 ﻿namespace EcommerceAPI.Application.Categories.Dtos
 {
-    public record CategoryDto(string Name, string Description);
+    public record CategoryDto(int Id, string Name, string Description);
 }
