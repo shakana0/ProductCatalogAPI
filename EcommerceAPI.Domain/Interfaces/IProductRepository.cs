@@ -10,7 +10,7 @@ namespace EcommerceAPI.Domain.Interfaces
         Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken);
         Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken);
 
-        Task UpdateAsync(Product product, CancellationToken cancellationToken);
+        Task<Product?> UpdateAsync(int id, string name, string description, decimal price, int stockQuantity, int categoryId, CancellationToken cancellationToken);
 
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
     }
