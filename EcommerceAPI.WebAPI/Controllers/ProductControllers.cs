@@ -1,5 +1,6 @@
 ﻿using EcommerceAPI.Application.Products.Commands.CreateProduct;
 using EcommerceAPI.Application.Products.Commands.DeleteProduct;
+using EcommerceAPI.Application.Products.Commands.UpdateProduct;
 using EcommerceAPI.Application.Products.Dtos;
 using EcommerceAPI.Application.Products.Queries.GetProductById;
 using EcommerceAPI.Application.Products.Queries.GetProducts;
@@ -49,6 +50,21 @@ namespace EcommerceAPI.WebAPI.Controllers
                 product
             );
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ProductDto>> Update(int id, [FromBody] UpdateProductCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest("Route id and body id must match.");
+
+            var updatedProduct = await _mediator.Send(command);
+
+            if (updatedProduct == null)
+                return NotFound($"No Product found for Id: {id}");
+
+            return Ok(updatedProduct);
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
