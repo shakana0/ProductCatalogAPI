@@ -3,7 +3,7 @@ using EcommerceAPI.Infrastructure.Context;
 using EcommerceAPI.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EcommerceAPI.Application.AutoMapper;
-using EcommerceAPI.Application.Categories.Queries;
+using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
 
 var builder = WebApplication.CreateBuilder(args);
 
