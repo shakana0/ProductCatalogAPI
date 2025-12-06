@@ -1,4 +1,5 @@
 ﻿using EcommerceAPI.Application.Products.Commands.CreateProduct;
+using EcommerceAPI.Application.Products.Commands.DeleteProduct;
 using EcommerceAPI.Application.Products.Dtos;
 using EcommerceAPI.Application.Products.Queries.GetProductById;
 using EcommerceAPI.Application.Products.Queries.GetProducts;
@@ -48,6 +49,18 @@ namespace EcommerceAPI.WebAPI.Controllers
                 product
             );
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _mediator.Send(new DeleteProductCommand(id));
+
+            if (!result)
+                return NotFound($"No Product found for Id: {id}");
+
+            return NoContent();
+        }
+
 
     }
 }
