@@ -3,7 +3,7 @@ using EcommerceAPI.Application.Categories.Dtos;
 using EcommerceAPI.Domain.Interfaces;
 using MediatR;
 
-namespace EcommerceAPI.Application.Categories.Queries
+namespace EcommerceAPI.Application.Categories.Queries.GetCategoryById
 {
     public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDto?>
     {
