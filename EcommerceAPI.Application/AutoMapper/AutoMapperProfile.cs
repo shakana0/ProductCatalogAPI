@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using EcommerceAPI.Application.Categories.Dtos;
+using EcommerceAPI.Domain.Entities;
+
 
 
 namespace EcommerceAPI.Application.AutoMapper
@@ -8,8 +11,9 @@ namespace EcommerceAPI.Application.AutoMapper
         public AutoMapperProfile()
         {
             //Product
-            
+
             //Category
+            CreateMap<Category, CategoryDto>();
         }
     }
 }
