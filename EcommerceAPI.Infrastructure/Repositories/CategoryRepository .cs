@@ -31,10 +31,15 @@ namespace EcommerceAPI.Infrastructure.Repositories
             return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
 
-        public async Task UpdateAsync(Category category, CancellationToken cancellationToken)
+        public async Task<Category?> UpdateAsync(int id, string name, string description, CancellationToken cancellationToken)
         {
-            _context.Categories.Update(category);
+            var category = await GetByIdAsync(id, cancellationToken);
+            if (category == null) return null;
+
+            category.UpdateDetails(name, description);
+
             await _context.SaveChangesAsync(cancellationToken);
+            return category;
         }
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
