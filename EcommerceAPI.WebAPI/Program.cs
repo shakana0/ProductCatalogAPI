@@ -1,9 +1,14 @@
+using EcommerceAPI.Application.AutoMapper;
+using EcommerceAPI.Application.Behaviors;
+using EcommerceAPI.Application.Categories.Commands.CreateCategory;
+using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
 using EcommerceAPI.Domain.Interfaces;
 using EcommerceAPI.Infrastructure.Context;
 using EcommerceAPI.Infrastructure.Repositories;
+using EcommerceAPI.WebAPI.Extensions;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using EcommerceAPI.Application.AutoMapper;
-using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +52,9 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(AutoMapperProfile).Assembly);
 });
 
+//FluentValidation
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryCommandValidator>();
 
 var app = builder.Build();
 
@@ -58,6 +66,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseValidationExceptionHandler();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
