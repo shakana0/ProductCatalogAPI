@@ -1,5 +1,6 @@
 ﻿using EcommerceAPI.Application.Categories.Dtos;
-using EcommerceAPI.Application.Categories.Queries;
+using EcommerceAPI.Application.Categories.Queries.GetAllCategories;
+using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,16 @@ namespace EcommerceAPI.WebAPI.Controllers
         {
             _mediator = mediator;
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAll()
+        {
+            var categories = await _mediator.Send(new GetAllCategoriesQuery());
+
+            return Ok(categories);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDto>> GetById(int id)
