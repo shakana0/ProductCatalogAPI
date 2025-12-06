@@ -36,10 +36,15 @@ namespace EcommerceAPI.Infrastructure.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(Product product, CancellationToken cancellationToken)
+        public async Task<Product?> UpdateAsync(int id, string name, string description, decimal price, int stockQuantity, int categoryId, CancellationToken cancellationToken)
         {
-            _context.Products.Update(product);
+            var product = await GetByIdAsync(id, cancellationToken);
+            if (product == null) return null;
+
+            product.UpdateDetails(name, description, price, stockQuantity, categoryId);
+
             await _context.SaveChangesAsync(cancellationToken);
+            return product;
         }
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
