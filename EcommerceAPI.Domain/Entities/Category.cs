@@ -21,7 +21,7 @@ public class Category
         Description = description;
     }
 
-    public void UpdateDetails(string name, string description)
+    public void UpdateDetails(string? name, string? description)
     {
         if (!string.IsNullOrWhiteSpace(name))
             Name = name;
