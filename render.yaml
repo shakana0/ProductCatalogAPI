@@ -1,8 +1,7 @@
 services:
   - type: web
     name: ecommerceapi-webapi
-    env: dotnet
+    env: docker
     rootDir: EcommerceAPI.WebAPI
-    buildCommand: dotnet build
-    startCommand: dotnet EcommerceAPI.WebAPI.dll
+    dockerfilePath: EcommerceAPI.WebAPI/Dockerfile
     plan: free
