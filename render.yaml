@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: ecommerceapi-webapi
+    env: dotnet
+    rootDir: EcommerceAPI.WebAPI
+    buildCommand: dotnet build
+    startCommand: dotnet EcommerceAPI.WebAPI.dll
+    plan: free
