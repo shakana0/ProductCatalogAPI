@@ -5,6 +5,7 @@ using EcommerceAPI.Application.Categories.Dtos;
 using EcommerceAPI.Application.Categories.Queries.GetAllCategories;
 using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceAPI.WebAPI.Controllers
@@ -41,6 +42,7 @@ namespace EcommerceAPI.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryCommand command)
         {
             var category = await _mediator.Send(new CreateCategoryCommand(command.Name, command.Description));
@@ -48,6 +50,7 @@ namespace EcommerceAPI.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<CategoryDto>> Update(int id, [FromBody] UpdateCategoryCommand command)
         {
             if (id != command.Id)
@@ -63,6 +66,7 @@ namespace EcommerceAPI.WebAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteCategoryCommand(id));
