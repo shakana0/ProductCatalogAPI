@@ -5,6 +5,7 @@ using EcommerceAPI.Application.Products.Dtos;
 using EcommerceAPI.Application.Products.Queries.GetProductById;
 using EcommerceAPI.Application.Products.Queries.GetProducts;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -40,6 +41,7 @@ namespace EcommerceAPI.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductCommand command)
         {
             var product = await _mediator.Send(command);
@@ -52,6 +54,7 @@ namespace EcommerceAPI.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<ProductDto>> Update(int id, [FromBody] UpdateProductCommand command)
         {
             if (id != command.Id)
@@ -67,6 +70,7 @@ namespace EcommerceAPI.WebAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteProductCommand(id));
