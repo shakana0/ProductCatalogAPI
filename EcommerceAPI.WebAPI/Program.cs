@@ -8,8 +8,10 @@ using EcommerceAPI.Infrastructure.Repositories;
 using EcommerceAPI.WebAPI.Extensions;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 
@@ -26,6 +28,27 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddControllers();
+
+//Auth
+var issuer = builder.Configuration["Jwt:Issuer"];
+var audience = builder.Configuration["Jwt:Audience"];
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = issuer;
+        options.Audience = audience;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = issuer,
+            ValidateAudience = true,
+            ValidAudience = audience,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true
+        };
+    });
+
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -86,6 +109,7 @@ app.UseSwaggerUI(c =>
 app.MapGet("/health", () => "OK");
 
 app.UseValidationExceptionHandler();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
