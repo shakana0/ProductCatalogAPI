@@ -1,7 +1,10 @@
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using EcommerceAPI.Application.AutoMapper;
 using EcommerceAPI.Application.Behaviors;
 using EcommerceAPI.Application.Categories.Commands.CreateCategory;
 using EcommerceAPI.Application.Categories.Queries.GetCategoryById;
+using EcommerceAPI.Application.Infrastructure.Config;
 using EcommerceAPI.Domain.Interfaces;
 using EcommerceAPI.Infrastructure.Context;
 using EcommerceAPI.Infrastructure.Repositories;
@@ -16,11 +19,32 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var licenseKey = builder.Configuration["LuckyPenny:LicenseKey"];
+// // Configuration
+// Load secrets from Azure Key Vault
+var licenseVaultUri = new Uri("https://luckypenny-license-key.vault.azure.net/");
+var connstrVaultUri = new Uri("https://connstr-ecomdb.vault.azure.net/");
+var credential = new DefaultAzureCredential();
+
+var licenseClient = new SecretClient(licenseVaultUri, credential);
+var connstrClient = new SecretClient(connstrVaultUri, credential);
+
+var licenseKey = licenseClient.GetSecret("LicenseKey").Value.Value;
+var connectionString = connstrClient.GetSecret("EcommerceDb").Value.Value;
+
+//register secrets as singleton
+builder.Services.AddSingleton(new SecretsConfig
+{
+    LicenseKey = licenseKey,
+    ConnectionString = connectionString
+});
 
 // DbContext
-builder.Services.AddDbContext<EcommerceApiDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("EcommerceDb")));
+builder.Services.AddDbContext<EcommerceApiDbContext>((sp, options) =>
+{
+    var secrets = sp.GetRequiredService<SecretsConfig>();
+    options.UseSqlServer(secrets.ConnectionString);
+});
+
 
 // Repositories
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -76,16 +100,14 @@ builder.Services.AddCors(options =>
 // MediatR
 builder.Services.AddMediatR(cfg =>
 {
-    cfg.LicenseKey = licenseKey;
     cfg.RegisterServicesFromAssembly(typeof(GetCategoryByIdHandler).Assembly);
 });
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LicenseBehavior<,>));
+
 
 // AutoMapper
-builder.Services.AddAutoMapper(cfg =>
-{
-    cfg.LicenseKey = licenseKey;
-    cfg.AddMaps(typeof(AutoMapperProfile).Assembly);
-});
+builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile).Assembly);
+
 
 // FluentValidation
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -105,7 +127,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecommerce API V1");
-    c.RoutePrefix = string.Empty; // Swagger UI på root (/)
+    c.RoutePrefix = string.Empty;
 });
 
 // Health endpoint för snabb test
