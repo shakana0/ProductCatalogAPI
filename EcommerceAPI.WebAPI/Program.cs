@@ -9,7 +9,6 @@ using EcommerceAPI.WebAPI.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -21,7 +20,7 @@ var licenseKey = builder.Configuration["LuckyPenny:LicenseKey"];
 
 // DbContext
 builder.Services.AddDbContext<EcommerceApiDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EcommerceDb")));
 
 // Repositories
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -94,6 +93,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryCommandValida
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<EcommerceApiDbContext>();
+}
 
 app.UseRouting();
 app.UseCors("AllowFrontend");
