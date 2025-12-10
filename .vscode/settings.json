@@ -1,4 +1,4 @@
 {
-  "appService.defaultWebAppToDeploy": "/subscriptions/c2a979f5-5e87-4e7f-97aa-9d6474164db5/resourceGroups/BackendDev-EU-RG/providers/Microsoft.Web/sites/EcommerceApi",
-  "appService.deploySubpath": "EcommerceAPI.WebAPI/bin/Release/net9.0/publish"
+  "appService.defaultWebAppToDeploy": "/subscriptions/c2a979f5-5e87-4e7f-97aa-9d6474164db5/resourceGroups/EcommerceApi-RG/providers/Microsoft.Web/sites/EcommerceApi",
+  "appService.deploySubpath": "EcommerceAPI.WebAPI/bin/Release/net9.0/linux-x64/publish"
 }
