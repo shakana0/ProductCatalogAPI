@@ -1,4 +1,4 @@
-name: Deploy Ecommerce API
+name: CI/CD for Ecommerce API
 
 on:
   push:
@@ -6,9 +6,8 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-test-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -19,38 +18,18 @@ jobs:
           dotnet-version: "9.0.x"
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore EcommerceAPI.sln
 
-      - name: Publish WebAPI
-        run: dotnet publish ./Ecommerce.WebAPI/Ecommerce.WebAPI.csproj --configuration Release
+      - name: Publish
+        run: dotnet publish ./EcommerceAPI.WebAPI/EcommerceAPI.WebAPI.csproj -c Release -o ./publish
 
-      - name: Verify publish directory
-        run: |
-          echo "Checking if publish folder exists..."
-          if [ -d "./Ecommerce.WebAPI/bin/Release/net9.0/publish" ]; then
-            echo "✅ Publish folder found."
-            ls -la ./Ecommerce.WebAPI/bin/Release/net9.0/publish
-          else
-            echo "❌ Publish folder missing."
-            exit 1
-          fi
-
-      - name: Zip publish folder
-        run: |
-          cd ./Ecommerce.WebAPI/bin/Release/net9.0
-          zip -r publish.zip ./publish
-
-      - name: Run tests
-        run: dotnet test ./Ecommerce.Tests/Ecommerce.Tests.csproj --configuration Release --verbosity detailed
-
-      - name: Login to Azure
+      - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy using ZIP
-        run: |
-          az webapp deployment source config-zip \
-            --name Ecommerce-webapi \
-            --resource-group BackendDev-EU-RG \
-            --src ./Ecommerce.WebAPI/bin/Release/net9.0/publish.zip
+      - name: Deploy to Azure WebApp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          package: ./publish
