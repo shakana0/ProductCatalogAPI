@@ -42,7 +42,7 @@ namespace EcommerceAPI.WebAPI.Controllers
         }
 
         [HttpPost]
-        // [Authorize]
+        [Authorize]
         public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryCommand command)
         {
             var category = await _mediator.Send(new CreateCategoryCommand(command.Name, command.Description));

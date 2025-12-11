@@ -41,7 +41,7 @@ namespace EcommerceAPI.WebAPI.Controllers
         }
 
         [HttpPost]
-        // [Authorize]
+        [Authorize]
         public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductCommand command)
         {
             var product = await _mediator.Send(command);
