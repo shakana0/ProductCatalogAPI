@@ -41,16 +41,16 @@ namespace EcommerceAPI.WebAPI.Controllers
             return Ok(category);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryCommand command)
         {
             var category = await _mediator.Send(new CreateCategoryCommand(command.Name, command.Description));
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{id}")]
-        [Authorize]
         public async Task<ActionResult<CategoryDto>> Update(int id, [FromBody] UpdateCategoryCommand command)
         {
             if (id != command.Id)
@@ -64,9 +64,8 @@ namespace EcommerceAPI.WebAPI.Controllers
             return Ok(updatedCategory);
         }
 
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteCategoryCommand(id));
