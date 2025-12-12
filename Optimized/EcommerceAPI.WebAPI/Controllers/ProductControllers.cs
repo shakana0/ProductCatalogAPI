@@ -40,8 +40,8 @@ namespace EcommerceAPI.WebAPI.Controllers
             return Ok(products);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductCommand command)
         {
             var product = await _mediator.Send(command);
@@ -53,8 +53,8 @@ namespace EcommerceAPI.WebAPI.Controllers
             );
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("{id}")]
-        [Authorize]
         public async Task<ActionResult<ProductDto>> Update(int id, [FromBody] UpdateProductCommand command)
         {
             if (id != command.Id)
@@ -68,9 +68,8 @@ namespace EcommerceAPI.WebAPI.Controllers
             return Ok(updatedProduct);
         }
 
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteProductCommand(id));
@@ -80,7 +79,6 @@ namespace EcommerceAPI.WebAPI.Controllers
 
             return NoContent();
         }
-
 
     }
 }
