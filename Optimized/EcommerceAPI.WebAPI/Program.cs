@@ -114,7 +114,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<EcommerceApiDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<EcommerceApiDbContext>();
+    await DbSeeder.SeedAsync(context);
 }
 
 app.UseRouting();
