@@ -5,7 +5,7 @@ using EcommerceAPI.Application.Products.Dtos;
 
 namespace EcommerceAPI.Application.Products.Queries.GetProducts
 {
-    public class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDto>>
+    public class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, PagedResult<ProductDto>>
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
@@ -16,11 +16,18 @@ namespace EcommerceAPI.Application.Products.Queries.GetProducts
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            var products = await _productRepository.GetAllAsync(cancellationToken);
+            var totalCount = await _productRepository.CountAsync(cancellationToken);
+            var products = await _productRepository.GetPagedAsync(request.Page, request.PageSize, cancellationToken);
 
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
+            return new PagedResult<ProductDto>
+            {
+                Items = _mapper.Map<IEnumerable<ProductDto>>(products),
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
         }
     }
 }
