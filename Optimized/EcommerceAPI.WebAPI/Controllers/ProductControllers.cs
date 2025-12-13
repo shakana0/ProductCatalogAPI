@@ -34,10 +34,11 @@ namespace EcommerceAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
+        public async Task<ActionResult<PagedResult<ProductDto>>> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var products = await _mediator.Send(new GetAllProductsQuery());
-            return Ok(products);
+            var query = new GetAllProductsQuery { Page = page, PageSize = pageSize };
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [Authorize(Policy = "AdminOnly")]
