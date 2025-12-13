@@ -22,6 +22,20 @@ namespace EcommerceAPI.Infrastructure.Repositories
             return product;
         }
 
+        public async Task<IEnumerable<Product>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken)
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<int> CountAsync(CancellationToken cancellationToken)
+        {
+            return await _context.Products.CountAsync(cancellationToken);
+        }
+
         public async Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.Products
