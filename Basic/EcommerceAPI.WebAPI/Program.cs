@@ -30,10 +30,10 @@ builder.Services.AddSingleton(sp => new SecretsConfig
 });
 
 // DbContext
-builder.Services.AddDbContext<EcommerceApiDbContext>((sp, options) =>
+builder.Services.AddDbContext<EcommerceApiDbContext>(options =>
 {
-    var secretsProvider = sp.GetRequiredService<SecretsProvider>();
-    options.UseSqlServer(secretsProvider.GetConnectionString());
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseSqlServer(connectionString);
 });
 
 
