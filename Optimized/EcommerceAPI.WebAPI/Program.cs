@@ -69,6 +69,8 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("org_role", "org:admin"));
 });
 
+//Cache
+builder.Services.AddMemoryCache();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
