@@ -7,6 +7,7 @@ using EcommerceAPI.Application.Products.Queries.GetProducts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace EcommerceAPI.WebAPI.Controllers
@@ -16,10 +17,12 @@ namespace EcommerceAPI.WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMemoryCache _cache;
 
-        public ProductsController(IMediator mediator)
+        public ProductsController(IMediator mediator, IMemoryCache cache)
         {
             _mediator = mediator;
+            _cache = cache;
         }
 
         [HttpGet("{id}")]
@@ -36,8 +39,15 @@ namespace EcommerceAPI.WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResult<ProductDto>>> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var query = new GetAllProductsQuery { Page = page, PageSize = pageSize };
-            var result = await _mediator.Send(query);
+            var cacheKey = $"products_page_{page}_size_{pageSize}";
+
+            var result = await _cache.GetOrCreateAsync(cacheKey, async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
+
+                var query = new GetAllProductsQuery { Page = page, PageSize = pageSize };
+                return await _mediator.Send(query);
+            });
             return Ok(result);
         }
 
