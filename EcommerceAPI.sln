@@ -14,6 +14,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommerceAPI.WebAPI", "Basic\EcommerceAPI.WebAPI\EcommerceAPI.WebAPI.csproj", "{C5EA0AAF-D245-4955-9DB3-88A31DA54E38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Optimized", "Optimized", "{7C28F728-FB7B-B3E2-251C-DE8E524AA9F1}"
+	ProjectSection(SolutionItems) = preProject
+		RemoveVSCode.ps1 = RemoveVSCode.ps1
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcommerceAPI.Domain", "Optimized\EcommerceAPI.Domain\EcommerceAPI.Domain.csproj", "{AD768B8E-DBB3-48B6-B44B-8AB8117B8814}"
 EndProject
@@ -142,5 +145,8 @@ Global
 		{F627AA99-3881-479D-B3A1-AD3F61DC8C31} = {7C28F728-FB7B-B3E2-251C-DE8E524AA9F1}
 		{82B5A3FA-45FF-4D64-8282-537B6EA9BF9D} = {7C28F728-FB7B-B3E2-251C-DE8E524AA9F1}
 		{5880DF41-4027-41AB-AAF7-EC7BB09B80BF} = {7C28F728-FB7B-B3E2-251C-DE8E524AA9F1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF1B6C28-D41D-4B3A-BB9A-C192357800D5}
 	EndGlobalSection
 EndGlobal
