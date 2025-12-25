@@ -83,7 +83,6 @@ This is the Grafana Cloud dashboard for the Optimized API, visualizing request r
 <img src="./assets/optimized2.png" width="500" alt="Grafana Cloud threshold analysis showing cache hits, rate limits, and response time for Optimized API" />
 This view shows threshold analysis in Grafana Cloud, highlighting cache efficiency, rate limiting, and P95 response time.
 
-
 ---
 ## Result based on test
 - Basic API: higher response times, no caching, all requests hit the database.
@@ -99,6 +98,11 @@ This view shows threshold analysis in Grafana Cloud, highlighting cache efficien
 2. Start the local SQL database via Docker (`docker-compose up -d`)  
 3. Run either API project from Visual Studio or `dotnet run`  
 4. The frontend (ProductCatalogUI) will target the API version based on toggle button
+
+---
+## ProductCatalogUI - Frontend
+<img src="./assets/prodcat1.png" width="500" alt="ProductCatalogUI displaying product cards while targeting API version based on toggle state" />
+This view shows the product catalog page in ProductCatalogUI. The frontend dynamically selects the API version based on the green toggle button, allowing seamless switching between environments.
 
 ---
 ## 🧰 Tech Stack
