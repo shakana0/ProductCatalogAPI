@@ -38,14 +38,16 @@ namespace EcommerceAPI.WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResult<ProductDto>>> GetAll(
      [FromQuery] int page = 1,
-     [FromQuery] int pageSize = 20)
+     [FromQuery] int pageSize = 20,
+     [FromQuery] int? categoryId = null)
         {
             var sw = Stopwatch.StartNew();
 
             var query = new GetAllProductsQuery
             {
                 Page = page,
-                PageSize = pageSize
+                PageSize = pageSize,
+                CategoryId = categoryId
             };
 
             var products = await _mediator.Send(query);
