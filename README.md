@@ -43,20 +43,28 @@ This ensures a fair, apples‑to‑apples comparison.
 ---
 ## 🚀 API Versions
 
-| Feature / Capability        | Basic API | Optimized API |
-|-----------------------------|-----------|----------------|
-| CRUD Endpoints              | ✔️        | ✔️             |
-| Admin Authentication        | ✔️        | ✔️             |
-| Pagination                  | ❌        | ✔️             |
-| Database                    | Local Docker SQL | Azure SQL Database |
-| Hosting                     | Local     | Azure App Service |
-| Azure API Management        | ❌        | ✔️ (gateway)   |
-| Rate Limiting               | ❌        | ✔️             |
-| Response Caching            | ❌        | ✔️             |
-| Cloud Logging               | ❌        | ✔️ (App Insights) |
-| CI/CD                       | ❌        | ✔️ (GitHub Actions) |
-| Purpose                     | Baseline comparison | Optimized, production‑ready |
+| Feature / Capability                | Basic API              | Optimized API                               |
+|-------------------------------------|-------------------------|----------------------------------------------|
+| CRUD Endpoints                      | ✔️                      | ✔️                                            |
+| Admin Authentication                | ✔️                      | ✔️                                            |
+| Pagination                          | ❌                      | ✔️                                            |
+| Filtering                           | ❌                      | ✔️ (CategoryId)                               |
+| Database Indexing                   | ❌                      | ✔️ (Composite + INCLUDE index)                |
+| Optimized Query Execution           | ❌                      | ✔️ (Index Seek, no Key Lookup)                |
+| Database                            | Local Docker SQL        | Azure SQL Database                            |
+| Hosting                             | Local                   | Azure App Service                             |
+| Azure API Management                | ❌                      | ✔️ (gateway)                                  |
+| Rate Limiting                       | ❌                      | ✔️                                            |
+| Response Caching                    | ❌                      | ✔️                                            |
+| Cloud Logging                       | ❌                      | ✔️ (Application Insights)                             |
+| CI/CD                               | ❌                      | ✔️ (GitHub Actions)                           |
+| Purpose                             | Baseline comparison     | Optimized, production‑ready                   |
 
+### SQL Indexing
+
+<img src="./assets/index.png" width="500" alt="Screenshot of Index Seek of IX_Products_CategoryId_Id_Include in SQL data base" />
+
+The optimized API uses a composite index on (CategoryId, Id) with included columns to support efficient filtering and pagination. SQL Server performs an Index Seek instead of a Key Lookup, significantly reducing IO and improving performance under load.
 
 ---
 ## 📊 Load Testing (k6)
